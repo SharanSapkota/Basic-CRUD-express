@@ -23,16 +23,19 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const UserSchema = require('./model/user')
+const Signup = require('./routes/signup')
+const Dashboard = require('./routes/dashboard')
 
 const app = express();
 
 app.use(express.json())
 
-app.get('/', async (req, res) => {
 
-  const getAllUsers = await UserSchema.find()
-  res.status(200).json({getAllUsers})
-})
+//*******---------------------- FOCUS -----------------***********************
+app.use('/signup', Signup)
+
+app.use('/dashboard', Dashboard)
+
 
 app.get('/:id', async (req, res) => {
     try {
@@ -51,7 +54,6 @@ app.get('/:id', async (req, res) => {
 })
 
 app.delete('/:id', async(req, res) => {
-    console.log('delete')
     try {
     const findAndDelete = await UserSchema.findOneAndDelete({_id: req.params.id})
     if(findAndDelete) {
@@ -66,8 +68,6 @@ app.delete('/:id', async(req, res) => {
     }
 
 })
-// [{},{},{}]
-
 
 app.post('/signup', async (req, res) => {
     const newUser = new UserSchema(req.body)
@@ -77,7 +77,7 @@ app.post('/signup', async (req, res) => {
 
 
 app.patch('/edit/:id', async (req, res) => {
-    console.log(req.body)
+    
 // suruma params bata aako id khojne i.e mongoose getById query garne
 
 //tyo Id bhetyo ki bhetena check garne 
